@@ -1,0 +1,51 @@
+auto lo
+iface lo inet loopback
+
+iface ens21 inet manual
+
+iface ens19 inet manual
+
+iface ens18 inet manual
+
+iface ens20 inet manual
+
+iface ens22 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.255.199/24
+        bridge-ports ens21
+        bridge-stp off
+        bridge-fd 0
+
+auto vmbrFrontNAT
+iface vmbrFrontNAT inet static
+        address 192.168.101.199/24
+        gateway 192.168.101.200
+        bridge-ports ens19
+        bridge-stp off
+        bridge-fd 0
+
+auto vmbrMyMgmt
+iface vmbrMyMgmt inet static
+        address 192.168.100.20/24
+        bridge-ports ens22
+        bridge-stp off
+        bridge-fd 0
+        up ip route add 192.168.192.0/24 via 192.168.100.1
+
+auto vmbrBack1
+iface vmbrBack1 inet static
+        address 192.168.111.10/24
+        bridge-ports ens18
+        bridge-stp off
+        bridge-fd 0
+
+auto vmbrClast
+iface vmbrClast inet static
+        address 192.168.244.1/24
+        bridge-ports ens20
+        bridge-stp off
+        bridge-fd 0
+
+source /etc/network/interfaces.d/*

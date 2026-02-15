@@ -1,0 +1,36 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug ens18
+iface ens18 inet static
+        address 192.168.100.35/24
+        up ip route add 192.168.192.0/24 via 192.168.100.1
+
+auto ens19
+
+iface ens19 inet manual
+
+auto ens20
+iface ens20 inet manual
+
+auto vmbrFrontNAT
+iface vmbrFrontNAT inet static
+        address 192.168.1.14/24
+        gateway 192.168.1.100
+        bridge-ports ens19
+        bridge-stp off
+        bridge-fd 0
+
+auto vmbrKeeper
+iface vmbrKeeper inet static
+        address 192.168.253.11/24
+        bridge-ports ens20
+        bridge-stp off
+        bridge-fd 0
